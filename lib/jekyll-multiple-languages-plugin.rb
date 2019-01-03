@@ -13,6 +13,17 @@ require_relative "plugin/version"
 
 module Jekyll
 
+  # Need to reload yaml translations in order to see use the new version when --watch is enabled...
+  #*****************************************************************************
+  # :site, :pre_render hook
+  #*****************************************************************************
+  Jekyll::Hooks.register :site, :pre_render do |site|
+    lang = site.config['lang']
+    puts              "Loading translation from file #{site.source}/_i18n/#{lang}.yml"
+    site.parsed_translations[lang] = YAML.load_file("#{site.source}/_i18n/#{lang}.yml")
+  end
+
+
   #*****************************************************************************
   # :site, :post_write hook
   #*****************************************************************************
